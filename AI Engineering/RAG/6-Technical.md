@@ -1,6 +1,4 @@
-# Hands-on RAG Implementation Notes
-
-Quick revision-friendly summary of the implemented RAG pipeline.
+# Hands-on RAG Implementation Workflow
 
 ---
 
