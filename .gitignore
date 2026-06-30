@@ -1,0 +1,51 @@
+# OS files
+.DS_Store
+Thumbs.db
+__MACOSX/
+
+# IDEs and editors
+.idea/
+.vscode/
+*.iml
+*.iws
+*.ipr
+.settings/
+.classpath
+.project
+.factorypath
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+venv/
+env/
+ENV/
+.ipynb_checkpoints/
+.pytest_cache/
+.mypy_cache/
+
+# Java / Maven / Gradle / Spring Boot
+target/
+build/
+bin/
+*.class
+*.jar
+*.war
+*.ear
+.gradle/
+*.zip
+*.tar.gz
+
+# Database local configurations
+*.db
+*.sqlite
+
+# Secrets and environment variables
+.env
+.env.local
+.env.*.local
+*.pem
+*.key

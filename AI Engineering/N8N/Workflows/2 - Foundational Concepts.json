@@ -1,0 +1,821 @@
+{
+  "name": "2 - Foundational Concepts",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "1. Fixed fields and Expression fields\n\n-why to use expression\n-mapping different field inputs\n"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        240,
+        -64
+      ],
+      "typeVersion": 1,
+      "id": "c9d2a592-68b2-4999-b97d-b8d1e174f3bb",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -336,
+        176
+      ],
+      "id": "fef36274-c0c8-4c11-8ef9-de0f56aee982",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "16NrdmsG1gaGGUHO9RNjl4-trZB331HZK5dMNcyAuev8",
+          "mode": "list",
+          "cachedResultName": "N8n Sample Sheet ",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/16NrdmsG1gaGGUHO9RNjl4-trZB331HZK5dMNcyAuev8/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/16NrdmsG1gaGGUHO9RNjl4-trZB331HZK5dMNcyAuev8/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -128,
+        176
+      ],
+      "id": "5b3da43f-8bd0-4b3f-9d0b-6f6c8b4a40dc",
+      "name": "Get row(s) in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "vWgrgaL9bUcav8Ca",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4.1-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4.1-MINI"
+        },
+        "responses": {
+          "values": [
+            {
+              "role": "system",
+              "content": "You're a helpful, intelligent writing assistant."
+            },
+            {
+              "content": "Your task is to personlize an email.\n\nYou will do this by taking , as input, a prospect Linkedin profile and then editing 5 templates for different sections of the email: subject line, icebreaker, elevator pitch, call to action, and a PS field. Give this 5 attributes as a separate key: value pair. Don't embed them in a single text field\n\nYour templtes are below:\n\nSubject Line: \"hey {name},think I have  something for you re:{thingAboutThem}\".\n\nIcebreaker: \"I Know you're doing {thing} and I've been following {relatedThing} for a while so I figured it made sense to chat\"\n\nELevator Pitch: \"The TLDR: I think I can add $5k/mo to {theirParaphrasedBusiness} with a few automated systems\"\n\nGuidelines:\n1. Your tone of voice should be \"casual bar conversation\" and very spartan. No fancy language.\n2. Look for plausible (but vague) connections wherever possible.\n3. Do not just repeat data from the LinkedIn profile verbatim. Paraphrase, so they think a human wrote it.\n4. Make sure the subject line is non-capitalized, even if it's grammatically incorrect. This makes the email seem human.\n5. Respond in JSON using this format:\nI\n{\"subjectLine\":\"\",\"icebreaker\": \"\", \"elevatorPitch\":\n\"\", \"callToAction\":\"\",\"ps\":\"\"}"
+            },
+            {
+              "content": "=title: {{ $json.Title }}\ncompany: {{ $json.Company }}\nsummary: {{ $json.Summary }}\nindustry: {{ $json.Industry }}\ncompanyLocation: {{ $json['Company Location'] }}\ntitleDescription: {{ $json.titleDescription}}"
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2.3,
+      "position": [
+        96,
+        176
+      ],
+      "id": "6c184342-4f6c-4730-bdd7-49236b1757d7",
+      "name": "Message a model",
+      "credentials": {
+        "openAiApi": {
+          "id": "Mc8czOCt7Vm4lig4",
+          "name": "n8n free OpenAI API credits"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Grab the original output object\nconst original = $json[\"output\"][0];\n\n// Parse the JSON string inside the text field\nconst raw = original[\"content\"][0][\"text\"];\nconst parsed = JSON.parse(raw);\n\n// Merge original fields with parsed fields\nreturn [\n  {\n    ...original,   // keep id, type, status, role, etc.\n    ...parsed      // add subjectLine, icebreaker, elevatorPitch, callToAction, ps\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        432,
+        176
+      ],
+      "id": "8d864259-1ad9-4f6d-a7f7-ff439bbecf55",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "16NrdmsG1gaGGUHO9RNjl4-trZB331HZK5dMNcyAuev8",
+          "mode": "list",
+          "cachedResultName": "N8n Sample Sheet ",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/16NrdmsG1gaGGUHO9RNjl4-trZB331HZK5dMNcyAuev8/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/16NrdmsG1gaGGUHO9RNjl4-trZB331HZK5dMNcyAuev8/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Email": "={{ $('Get row(s) in sheet').item.json.Email }}",
+            "Name": "={{ $('Get row(s) in sheet').item.json.Name }}",
+            "First Name Suggestion": "={{ $('Get row(s) in sheet').item.json['First Name'] }}",
+            " regularcompanyurl": "={{ $('Get row(s) in sheet').item.json.RegularCompanyUrl }}",
+            "Title": "={{ $('Get row(s) in sheet').item.json.Title }}",
+            "ProfileUrl": "={{ $('Get row(s) in sheet').item.json.ProfileUrl }}",
+            "Company": "={{ $('Get row(s) in sheet').item.json.Company }}",
+            "Company Legal Name": "={{ $('Get row(s) in sheet').item.json['Company Legal Name'] }}",
+            "Company Phone No": "={{ $('Get row(s) in sheet').item.json['Company Phone No'] }}",
+            "Website": "={{ $('Get row(s) in sheet').item.json.Website }}",
+            "Compnay Linkedin": "={{ $('Get row(s) in sheet').item.json['Compnay Linkedin'] }}",
+            "Summary": "={{ $('Get row(s) in sheet').item.json.Summary }}",
+            "RegularCompanyUrl": "={{ $('Get row(s) in sheet').item.json.RegularCompanyUrl }}",
+            "Industry": "={{ $('Get row(s) in sheet').item.json.Industry }}",
+            "Company Location": "={{ $('Get row(s) in sheet').item.json['Company Location'] }}",
+            "Location": "={{ $('Get row(s) in sheet').item.json.Location }}",
+            "Ispremium": "={{ $('Get row(s) in sheet').item.json.Ispremium }}",
+            "fullName": "={{ $('Get row(s) in sheet').item.json.fullName }}",
+            "titleDescription": "={{ $('Get row(s) in sheet').item.json.titleDescription }}",
+            "subject line": "={{ $json.subjectLine }}",
+            "icebreaker": "={{ $json.icebreaker }}",
+            "elevator pitch": "={{ $json.elevatorPitch }}",
+            "call to action": "={{ $json.callToAction }}",
+            "PS field": "={{ $json.ps }}"
+          },
+          "matchingColumns": [
+            "Email"
+          ],
+          "schema": [
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "First Name",
+              "displayName": "First Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "First Name Suggestion",
+              "displayName": "First Name Suggestion",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": " regularcompanyurl",
+              "displayName": " regularcompanyurl",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Title",
+              "displayName": "Title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "ProfileUrl",
+              "displayName": "ProfileUrl",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Company",
+              "displayName": "Company",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Company Legal Name",
+              "displayName": "Company Legal Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Company Phone No",
+              "displayName": "Company Phone No",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Website",
+              "displayName": "Website",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Compnay Linkedin",
+              "displayName": "Compnay Linkedin",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Summary",
+              "displayName": "Summary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "RegularCompanyUrl",
+              "displayName": "RegularCompanyUrl",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Industry",
+              "displayName": "Industry",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Company Location",
+              "displayName": "Company Location",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Location",
+              "displayName": "Location",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Ispremium",
+              "displayName": "Ispremium",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "fullName",
+              "displayName": "fullName",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "titleDescription",
+              "displayName": "titleDescription",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "subject line",
+              "displayName": "subject line",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "icebreaker",
+              "displayName": "icebreaker",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "elevator pitch",
+              "displayName": "elevator pitch",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "call to action",
+              "displayName": "call to action",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "PS field",
+              "displayName": "PS field",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        640,
+        176
+      ],
+      "id": "6cc6d81b-dcba-47b7-9d42-8ac8c50bb3c3",
+      "name": "Update row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "vWgrgaL9bUcav8Ca",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "draft",
+        "subject": "=  {{ $json['subject line'] }}",
+        "message": "=Hi  {{ $json['First Name Suggestion'] }},\n{{ $('Code in JavaScript').item.json.icebreaker }}\n\n{{ $('Code in JavaScript').item.json.elevatorPitch }}\n\n\n{{ $('Code in JavaScript').item.json.callToAction }}\n\n\nps: {{ $('Code in JavaScript').item.json.ps }}\n",
+        "options": {
+          "sendTo": "={{ $json.Email }}"
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        848,
+        176
+      ],
+      "id": "0767a154-5b14-4744-948f-5d01e34030b1",
+      "name": "Create a draft",
+      "webhookId": "fbbb1ca0-d293-4a9d-ad30-546004f8a0ae",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "ttnEmDJf0aWQznO5",
+          "name": "Gmail OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": " https://devx008.app.n8n.cloud/webhook-test/0961430a-caae-4f2e-8a9f-b7d21b17eb7a",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        416,
+        544
+      ],
+      "id": "a05a16a4-aa59-401b-b451-9796c9770aa7",
+      "name": "HTTP Request"
+    }
+  ],
+  "pinData": {
+    "Message a model": [
+      {
+        "json": {
+          "output": [
+            {
+              "id": "msg_0fe3a7dbd38808a2006a367034421881908e83274c384ec9a8",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": "{\"subjectLine\":\"hey there, think I have something for you re:leading acme corp\",\"icebreaker\":\"I know you're running the show at Acme Corp and I've been following some shifts in manufacturing lately so I figured it made sense to chat\",\"elevatorPitch\":\"The TLDR: I think I can add $5k/mo to how Acme Corp operates with a few automated systems\",\"callToAction\":\"Want to hop on a quick call next week to see if this makes sense for you?\",\"ps\":\"PS: I've worked with a couple manufacturing leaders in NYC, so I get the hustle you’re in.\"}"
+                }
+              ],
+              "role": "assistant"
+            }
+          ]
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "output": [
+            {
+              "id": "msg_0a9046ea8ba6711c006a36703607e48194a4e9b2a62dfefbd9",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": "{\"subjectLine\":\"hey, think i have something for you re: driving innovation\",\"icebreaker\":\"I know you're leading tech innovation and I've been watching some cool tech trends out here so I figured it made sense to chat\",\"elevatorPitch\":\"the TLDR: I think I can add $5k/mo to your tech operations with a few automated systems\",\"callToAction\":\"how about we hop on a quick call to see if this makes sense?\",\"ps\":\"ps: San Francisco tech scene moves fast, happy to keep it short and practical\"}"
+                }
+              ],
+              "role": "assistant"
+            }
+          ]
+        },
+        "pairedItem": {
+          "item": 1
+        }
+      },
+      {
+        "json": {
+          "output": [
+            {
+              "id": "msg_087e12e91d76dfc9006a367037f2c88196aca6a385bc841a2c",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": "{\n  \"subjectLine\": \"hey, think i have something for you re: marketing strategies\",\n  \"icebreaker\": \"I know you're leading marketing at Market Gurus and I've been keeping an eye on marketing trends in Chicago so thought it made sense to connect\",\n  \"elevatorPitch\": \"The TLDR: I think I can add $5k/mo to your marketing efforts with a few automated systems\",\n  \"callToAction\": \"mind if we hop on a quick call to see if it’s a fit?\",\n  \"ps\": \"p.s. always curious about what’s next in marketing tech, happy to swap ideas\"\n}"
+                }
+              ],
+              "role": "assistant"
+            }
+          ]
+        },
+        "pairedItem": {
+          "item": 2
+        }
+      },
+      {
+        "json": {
+          "output": [
+            {
+              "id": "msg_0e9eb9ee576a178c006a367039f100819499d6f77ef694cb55",
+              "type": "message",
+              "status": "completed",
+              "content": [
+                {
+                  "type": "output_text",
+                  "annotations": [],
+                  "logprobs": [],
+                  "text": "```json\n{\n  \"subjectLine\": \"hey there, think i have something for you re: managing assets\",\n  \"icebreaker\": \"I know you're handling big finance moves and I've been tracking trends in asset management for a bit so figured it made sense to chat\",\n  \"elevatorPitch\": \"The TLDR: I think I can add $5k/mo to how you manage assets at Finance Pros with a few automated systems\",\n  \"callToAction\": \"Got a few minutes to see if this could fit your setup?\",\n  \"ps\": \"If not you, maybe someone on your team would be into this.\"\n}\n```"
+                }
+              ],
+              "role": "assistant"
+            }
+          ]
+        },
+        "pairedItem": {
+          "item": 3
+        }
+      }
+    ],
+    "Code in JavaScript": [
+      {
+        "json": {
+          "id": "msg_0fe3a7dbd38808a2006a367034421881908e83274c384ec9a8",
+          "type": "message",
+          "status": "completed",
+          "content": [
+            {
+              "type": "output_text",
+              "annotations": [],
+              "logprobs": [],
+              "text": "{\"subjectLine\":\"hey there, think I have something for you re:leading acme corp\",\"icebreaker\":\"I know you're running the show at Acme Corp and I've been following some shifts in manufacturing lately so I figured it made sense to chat\",\"elevatorPitch\":\"The TLDR: I think I can add $5k/mo to how Acme Corp operates with a few automated systems\",\"callToAction\":\"Want to hop on a quick call next week to see if this makes sense for you?\",\"ps\":\"PS: I've worked with a couple manufacturing leaders in NYC, so I get the hustle you’re in.\"}"
+            }
+          ],
+          "role": "assistant",
+          "subjectLine": "hey there, think I have something for you re:leading acme corp",
+          "icebreaker": "I know you're running the show at Acme Corp and I've been following some shifts in manufacturing lately so I figured it made sense to chat",
+          "elevatorPitch": "The TLDR: I think I can add $5k/mo to how Acme Corp operates with a few automated systems",
+          "callToAction": "Want to hop on a quick call next week to see if this makes sense for you?",
+          "ps": "PS: I've worked with a couple manufacturing leaders in NYC, so I get the hustle you’re in."
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ],
+    "Get row(s) in sheet": [
+      {
+        "json": {
+          "row_number": 2,
+          "Name": "John Doe",
+          "First Name": "John",
+          "First Name Suggestion": "Johnny",
+          " regularcompanyurl": "John Doe",
+          "Title": "CEO",
+          "ProfileUrl": "[link removed]",
+          "Company": "Acme Corp",
+          "Company Legal Name": "Acme Corporation",
+          "Company Phone No": "555-0101",
+          "Website": "acme.com",
+          "Compnay Linkedin": "[link removed]",
+          "Summary": "Experienced CEO.\nLeading Acme Corp to new heights.",
+          "RegularCompanyUrl": "[link removed]",
+          "Industry": "Manufacturing",
+          "Company Location": "New York, NY",
+          "Location": "New York",
+          "Ispremium": true,
+          "fullName": "John Doe",
+          "titleDescription": "Chief Executive Officer",
+          "Email": "john.doe@acme.com",
+          "subject line": "",
+          "icebreaker": "",
+          "elevator pitch": "",
+          "call to action": "",
+          "PS field": ""
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "row_number": 3,
+          "Name": "Jane Smith",
+          "First Name": "Jane",
+          "First Name Suggestion": "Janey",
+          " regularcompanyurl": "Jane Smith",
+          "Title": "CTO",
+          "ProfileUrl": "[link removed]",
+          "Company": "Tech Innovators",
+          "Company Legal Name": "Tech Innovators LLC",
+          "Company Phone No": "555-0102",
+          "Website": "techinnovators.com",
+          "Compnay Linkedin": "[link removed]",
+          "Summary": "Tech visionary.\nDriving innovation at Tech Innovators.",
+          "RegularCompanyUrl": "techinnovators.com",
+          "Industry": "Technology",
+          "Company Location": "San Francisco, CA",
+          "Location": "San Francisco",
+          "Ispremium": false,
+          "fullName": "Jane Smith",
+          "titleDescription": "Chief Technology Officer",
+          "Email": "jane.smith@techinnovators.com",
+          "subject line": "",
+          "icebreaker": "",
+          "elevator pitch": "",
+          "call to action": "",
+          "PS field": ""
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "row_number": 4,
+          "Name": "Alice Johnson",
+          "First Name": "Alice",
+          "First Name Suggestion": "Ali",
+          " regularcompanyurl": "Alice Johnson",
+          "Title": "CMO",
+          "ProfileUrl": "[link removed]",
+          "Company": "Market Gurus",
+          "Company Legal Name": "Market Gurus Inc",
+          "Company Phone No": "555-0103",
+          "Website": "[link removed]",
+          "Compnay Linkedin": "[link removed]",
+          "Summary": "Marketing expert.\nCrafting strategies at Market Gurus.",
+          "RegularCompanyUrl": "[link removed]",
+          "Industry": "Marketing",
+          "Company Location": "Chicago, IL",
+          "Location": "Chicago",
+          "Ispremium": true,
+          "fullName": "Alice Johnson",
+          "titleDescription": "Chief Marketing Officer",
+          "Email": "alice.johnson@marketgurus.com",
+          "subject line": "",
+          "icebreaker": "",
+          "elevator pitch": "",
+          "call to action": "",
+          "PS field": ""
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      },
+      {
+        "json": {
+          "row_number": 5,
+          "Name": "Bob Williams",
+          "First Name": "Bob",
+          "First Name Suggestion": "Bobby",
+          " regularcompanyurl": "Bob Williams",
+          "Title": "CFO",
+          "ProfileUrl": "[link removed]",
+          "Company": "Finance Pros",
+          "Company Legal Name": "Finance Pros Ltd",
+          "Company Phone No": "555-0104",
+          "Website": "[link removed]",
+          "Compnay Linkedin": "[link removed]",
+          "Summary": "Financial wizard.\nManaging assets at Finance Pros.",
+          "RegularCompanyUrl": "[link removed]",
+          "Industry": "Finance",
+          "Company Location": "London, UK",
+          "Location": "London",
+          "Ispremium": false,
+          "fullName": "Bob Williams",
+          "titleDescription": "Chief Financial Officer",
+          "Email": "bob.williams@financepros.com",
+          "subject line": "",
+          "icebreaker": "",
+          "elevator pitch": "",
+          "call to action": "",
+          "PS field": ""
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ],
+    "Update row in sheet": [
+      {
+        "json": {
+          "Email": "john.doe@acme.com",
+          "Name": "John Doe",
+          "First Name Suggestion": "John",
+          " regularcompanyurl": "[link removed]",
+          "Title": "CEO",
+          "ProfileUrl": "[link removed]",
+          "Company": "Acme Corp",
+          "Company Legal Name": "Acme Corporation",
+          "Company Phone No": "555-0101",
+          "Website": "acme.com",
+          "Compnay Linkedin": "[link removed]",
+          "Summary": "Experienced CEO.\nLeading Acme Corp to new heights.",
+          "RegularCompanyUrl": "[link removed]",
+          "Industry": "Manufacturing",
+          "Company Location": "New York, NY",
+          "Location": "New York",
+          "Ispremium": true,
+          "fullName": "John Doe",
+          "titleDescription": "Chief Executive Officer",
+          "subject line": "hey there, think I have something for you re:leading acme corp",
+          "icebreaker": "I know you're running the show at Acme Corp and I've been following some shifts in manufacturing lately so I figured it made sense to chat",
+          "elevator pitch": "The TLDR: I think I can add $5k/mo to how Acme Corp operates with a few automated systems",
+          "call to action": "Want to hop on a quick call next week to see if this makes sense for you?",
+          "PS field": "PS: I've worked with a couple manufacturing leaders in NYC, so I get the hustle you’re in."
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Create a draft",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "f7c5f1ae-eb8a-488a-813a-78ef0a9e46dd",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "151fe71471be055f5b72050f34c0d6fcd5a1c37768b0fd80c630721be48b466e"
+  },
+  "nodeGroups": [],
+  "id": "o9nkXyAE92MJxwxp",
+  "tags": []
+}

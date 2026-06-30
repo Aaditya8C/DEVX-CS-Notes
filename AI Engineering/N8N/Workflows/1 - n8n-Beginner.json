@@ -1,0 +1,266 @@
+{
+  "name": "Beginner",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "1. Manual Trigger ---  Send an email to someone."
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        464,
+        -96
+      ],
+      "typeVersion": 1,
+      "id": "d853b49b-ebbf-4cf0-9c9b-254d29839a47",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "sendTo": "aadicodingvs@gmail.com",
+        "subject": "Hiii Aaditya",
+        "emailType": "text",
+        "message": "THis is sent by N8N Workflow.",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        512,
+        112
+      ],
+      "id": "555be0f2-3145-48f6-b19b-ad6ab8a1f5ff",
+      "name": "Send a message",
+      "webhookId": "b5241d10-4192-4679-9fdd-a47094cd5fa0",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "ttnEmDJf0aWQznO5",
+          "name": "Gmail OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "2.Form Fill --> AI Autoresponder\n\n-  Integrating AI to after submitting the form response to send the proper form reply."
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        464,
+        384
+      ],
+      "id": "cc941711-1620-4db9-8f74-b8209adb200e",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "formTitle": "Onboarding form",
+        "formDescription": "This is an onboarding form for XYZ. Fill out the fields and submit it.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "First Name",
+              "placeholder": "Aaditya",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Last Name",
+              "placeholder": "Padte",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Email",
+              "fieldType": "email",
+              "placeholder": "aadi@gmail.com",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Phone No.",
+              "placeholder": "1234567895"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.6,
+      "position": [
+        128,
+        672
+      ],
+      "id": "cfbd82d2-d420-4ff8-b80a-96ba81560346",
+      "name": "On form submission",
+      "webhookId": "a3f0e5c0-c486-4050-8754-f6e6ea1f5d08"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-5-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-5-MINI"
+        },
+        "responses": {
+          "values": [
+            {
+              "role": "system",
+              "content": "You're a helpful, intelligent email writing assistant."
+            },
+            {
+              "content": "=Your task is to cutomize the email using following data:\n\nFirst Name:  {{ $json['First Name'] }}\nLast Name: {{ $json['Last Name'] }}\nEmail Address: {{ $json.Email }}\nPhone No: {{ $json['Phone No.'] }}\n---\n\nEmail Template: \nHey {First Name},\nHow are you? Thanks for submitting your onboarding form. I see your {Phone No} and your email is {Email}.\n\nLet me know if mmissing something.\nThanks Aadi,\n\n-- \n\nDon't include the subject line"
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2.3,
+      "position": [
+        336,
+        672
+      ],
+      "id": "7e8c7e18-4a9c-4404-85af-f757b5debb14",
+      "name": "Message a model",
+      "credentials": {
+        "openAiApi": {
+          "id": "Mc8czOCt7Vm4lig4",
+          "name": "n8n free OpenAI API credits"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "aadicodingvs@gmail.com",
+        "subject": "Re: Your Onboarding form",
+        "emailType": "text",
+        "message": "={{ $json.output[0].content[0].text }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        896,
+        672
+      ],
+      "id": "5c61fb47-b03a-401f-ad0f-41b823cd607d",
+      "name": "Send a message1",
+      "webhookId": "b5241d10-4192-4679-9fdd-a47094cd5fa0",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "ttnEmDJf0aWQznO5",
+          "name": "Gmail OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "amount": 120
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        704,
+        672
+      ],
+      "id": "911db2c3-4ab2-4714-8afe-8fdec1655fe5",
+      "name": "Wait",
+      "webhookId": "eface6ad-7ce7-461c-ac83-6ec0571ac610"
+    },
+    {
+      "parameters": {
+        "content": "This is a delay of 120 seconds. ",
+        "height": 80,
+        "width": 150
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        688,
+        832
+      ],
+      "id": "e3d7ddbf-708c-455c-8a52-7df206610006",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "3.Calender Booking -> reply \n-> update CRM\n\n- trigger which will watch for new bookings, send \"personal\" email and update the CRM "
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        480,
+        1008
+      ],
+      "id": "4d87dc38-82ed-4321-8a4a-a2844bde6358",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "content": "Here On Form Submission trigger is used. We've removed as only one trigger can be used at a time in one workflow."
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        80,
+        832
+      ],
+      "id": "28fa3f50-e80e-46c5-975f-b23f010dc02d",
+      "name": "Sticky Note4"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message1": {
+      "main": [
+        []
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Send a message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "53f034cc-2d4b-43dd-a552-4e3c8c401185",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "151fe71471be055f5b72050f34c0d6fcd5a1c37768b0fd80c630721be48b466e"
+  },
+  "nodeGroups": [],
+  "id": "mkAPey23TCnWwBRM",
+  "tags": []
+}
