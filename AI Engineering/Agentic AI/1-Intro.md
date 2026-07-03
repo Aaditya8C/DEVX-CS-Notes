@@ -8,8 +8,8 @@
 
 | File | Topics Covered |
 |---|---|
-| [1-Core-Concepts.md](./1-Core-Concepts.md) | What is Agentic AI · Self-Modifying System Prompts · Prompt Contracts · Reverse Prompting · Context Compression |
-| [2-Multi-Agent-Patterns.md](./2-Multi-Agent-Patterns.md) | MCP Orchestration · Router Decision Hub · Stochastic Consensus · Agent Chat Rooms · Debate & Collaboration |
+| [1-Core-Concepts.md](./2-Core-Concepts.md) | What is Agentic AI · Self-Modifying System Prompts · Prompt Contracts · Reverse Prompting · Context Compression |
+| [2-Multi-Agent-Patterns.md](./3-Multi-Agent-Patterns.md) | MCP Orchestration · Router Decision Hub · Stochastic Consensus · Agent Chat Rooms · Debate & Collaboration |
 
 ---
 
