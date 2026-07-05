@@ -1,4 +1,4 @@
-# Agentic AI — Index
+# Agentic AI
 
 > **Resource:** [YouTube — Agentic AI Deep Dive](https://www.youtube.com/watch?v=EsTrWCV0Ph4&t=2s)
 
