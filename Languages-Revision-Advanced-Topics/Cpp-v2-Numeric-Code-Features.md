@@ -1,5 +1,24 @@
-# C++ Language Features for Numeric Code - Revision Notes
+# C++ Language Features for Numeric Code
 
+## Topics Covered
+
+- Templates & Generic Programming
+  - Function Templates
+  - Class Templates
+  - Basic Template Metaprogramming Awareness
+- `constexpr` and Compile-Time Computation
+- Operator Overloading
+  - Arithmetic Operators
+  - Comparison Operators
+  - Stream Operators (`<<`, `>>`)
+  - Best Practices for Custom Numeric Types (`Money`, `Decimal`, `Matrix`)
+- Time & Space Complexity
+- Performance Implications
+- Enterprise Use Cases (Pricing, Risk, Quantitative Libraries)
+- Common Mistakes
+- Best Practices
+- JP Morgan Production Perspective
+- Interview Revision Points
 ---
 
 # 1. Templates & Generic Programming
