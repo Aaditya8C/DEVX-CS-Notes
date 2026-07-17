@@ -20,7 +20,7 @@
 
 On signup, the server saves the user to DB and **immediately calls the external email provider (Gmail/SendGrid/AWS SES)** in the same request thread.
 
-![Basic Approach — Sync flow](Basic-Approach.png)
+![Basic Approach — Sync flow](Images/Basic-Approach.png)
 
 ```
   POST /signup { fname, lname, email }
@@ -44,7 +44,7 @@ On signup, the server saves the user to DB and **immediately calls the external 
 
 Instead of calling the provider directly, the signup handler fires a request to a **dedicated Email Server** and immediately returns a response to the user.
 
-![Async Approach — Email Server](Async.png)
+![Async Approach — Email Server](Images/Async.png)
 
 ```
   POST /signup { fname, lname, email }
@@ -66,7 +66,7 @@ Instead of calling the provider directly, the signup handler fires a request to 
 
 Instead of sending directly to the Email Server, **enqueue** the notification request into a FIFO queue. An Email Worker picks tasks off the queue and processes them at its own pace.
 
-![Queue Approach — Worker + Rate Limiting](Queue-Approach.png)
+![Queue Approach — Worker + Rate Limiting](Images/Queue-Approach.png)
 
 ```
   POST /signup { fname, lname, email }
@@ -112,7 +112,7 @@ If the provider fails on a request, the Worker retries. To prevent an infinite r
 
 **AWS Implementation (Approach 3):**
 
-![Queue Approach — AWS Architecture with SQS, EC2, DLQ, Exponential Backoff](Queue-Approach-AWS.png)
+![Queue Approach — AWS Architecture with SQS, EC2, DLQ, Exponential Backoff](Images/Queue-Approach-AWS.png)
 
 - **SQS** is the managed FIFO queue (Email Q, In-App Q, Push Notif Q)
 - **EC2 instance** is the Email Worker consuming from SQS
@@ -144,7 +144,7 @@ The signup email is one event. In a real social media app, many events need noti
 
 Each server action publishes a **generic event** to a central message broker (SNS). SNS **fans out** that event to the appropriate queues. Each queue has a dedicated worker for its channel.
 
-![Event-Driven Fan-Out Architecture](Event-Driven-Approach.png)
+![Event-Driven Fan-Out Architecture](Images/Event-Driven-Approach.png)
 
 ```
   POST /signup / POST /login / POST /sendreq
