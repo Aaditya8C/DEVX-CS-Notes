@@ -48,7 +48,7 @@ Sending full 4K to a mobile on a slow connection → constant buffering → bad 
 
 ---
 
-## Solution: Adaptive Bitrate Streaming (ABR)
+## Solution: Adaptive Bitrate Streaming (ABS)
 
 The server **pre-encodes the source video into multiple resolutions and splits each into small time-based chunks** (~2–10 seconds each). The client **continuously monitors its own network speed** and requests the appropriate quality chunk at each step.
 
@@ -84,7 +84,7 @@ The switch happens per chunk — the user barely notices a quality dip instead o
 
 ---
 
-## ABR Protocols
+## ABS Protocols
 
 | Protocol | Made By | File Format |
 |---|---|---|
