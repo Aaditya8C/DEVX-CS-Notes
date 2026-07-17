@@ -110,6 +110,16 @@ If the provider fails on a request, the Worker retries. To prevent an infinite r
 - Re-enqueue (for important notifications like welcome email)
 - Move to **Dead Letter Queue** after max retries — inspect manually
 
+**AWS Implementation (Approach 3):**
+
+![Queue Approach — AWS Architecture with SQS, EC2, DLQ, Exponential Backoff](Queue-Approach-AWS.png)
+
+- **SQS** is the managed FIFO queue (Email Q, In-App Q, Push Notif Q)
+- **EC2 instance** is the Email Worker consuming from SQS
+- **Exponential backoff** retry intervals: 0s → 1s → 2s → 4s → 8s → 16s
+- **Max retries: 10** → message moved to Dead Letter Queue (DLQ) for manual inspection
+- Each event type maps to its own function: `sendToPushNotification()`, `sendToInAppNotification()`
+
 ---
 
 ## Scaling to Multiple Event Types
