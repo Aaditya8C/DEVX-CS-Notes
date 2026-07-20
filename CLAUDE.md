@@ -1,4 +1,4 @@
-# Repository Instructions
+<!-- # Repository Instructions
 
 This repository contains my personal study notes for Computer Science and Software Engineering.
 
@@ -146,4 +146,4 @@ Keep the case study concise and relevant.
 
 # Objective
 
-The final output should resemble high-quality interview revision notes that can be read in 3–5 minutes per topic while still providing sufficient depth to understand the concept.
+The final output should resemble high-quality interview revision notes that can be read in 3–5 minutes per topic while still providing sufficient depth to understand the concept. -->
