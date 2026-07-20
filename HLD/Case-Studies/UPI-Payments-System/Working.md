@@ -35,17 +35,61 @@
 
 ---
 
-## Naive Design
+## Traditional Banking Baseline
+
+```
+[User] ──► [Bank A] ──► [RBI/clearing] ──► [Bank B]
+```
+
+![Traditional Banking System](Images/Traditional-Banking.png)
+
+**Why this matters**
+- Traditional inter-bank transfers use account numbers, IFSC, and clearing systems such as IMPS, NEFT, or RTGS.
+- The sender directly identifies the beneficiary bank and account details.
+- Settlement and routing paths are tightly coupled with bank endpoints.
+
+**Problems for UPI-style payments**
+- User-facing identifiers are bank account numbers, not VPAs.
+- Apps cannot easily route payments across banks without central switching.
+- Onboarding every app directly with every bank is impractical.
+- This model is too heavy for instant consumer payments.
+
+---
+
+## Naive UPI Architecture
 
 ```
 [User App] ──► [NPCI] ──► [Bank]
 ```
 
+![NPCI Banking Architecture](Images/NPCI-Banking.png)
+
+### NPCI Banking Architecture: components and flow
+
+- `UPI App / CPSP`: user-facing applications like PhonePe or GPay are not direct peers of NPCI. They connect through a certified Customer Payment Service Provider (CPSP) or sponsor bank.
+- `Sponsor Bank / PSP`: this entity owns the payer relationship and authenticates the user before creating a UPI transaction.
+- `NPCI Network`: the central switch that validates messages, resolves VPA routing, and forwards debit/credit instructions to the appropriate destination bank.
+- `Beneficiary Bank`: receives the credit instruction and completes the payee deposit.
+- `Recipient App`: shows the final transaction status to the payee after the beneficiary bank confirms credit.
+
+**Flow**
+1. User submits a payment request in the UPI app.
+2. The CPSP or sponsor bank validates the payer details, VPA, and transaction PIN.
+3. The certified PSP forwards the UPI request to NPCI.
+4. NPCI verifies the sender, resolves the beneficiary VPA, and chooses the target bank endpoint.
+5. NPCI forwards a debit request to the payer’s bank and a credit request to the beneficiary bank.
+6. Banks confirm success or failure back to NPCI.
+7. NPCI returns the final status to the originating PSP, which then updates the UPI app.
+
+**Why this architecture exists**
+- NPCI only trusts banks and registered PSPs, so app-to-NPCI direct traffic is blocked.
+- The PSP abstracts app-level identity into a bank-trusted payment message.
+- NPCI acts as a routing and validation layer rather than a consumer-facing endpoint.
+
 **Problems**
-- NPCI cannot accept direct connections from user apps.
-- There is no trust or certification model for every app.
-- No separation between app-level onboarding and bank-level settlement.
-- Endpoints cannot enforce bank-compliant KYC and liability controls.
+- Direct app connections to NPCI are impossible because of the trust model.
+- Apps cannot be onboarded individually by NPCI at consumer scale.
+- This design is required to keep NPCI a secure banking switch rather than an app platform.
 
 ---
 
@@ -71,8 +115,8 @@
   │              │                  │                     │                    │                    │
   │<VPA, PIN>    │                  │                     │                    │                    │
   │───►          │                  │                     │                    │                    │
-  │              │──► Payment Req ──▶│                     │                    │                    │
-  │              │                  │──► Auth & Routing ──▶│                    │                    │
+  │              │──► Payment Req ──▶│                     │                    │                    │                    │
+  │              │                  │──► Auth & Routing ──▶│                    │                    │                    │
   │              │                  │                     │──► Debit Request ──▶│                    │
   │              │                  │                     │                    │──► Credit Request ──▶│
   │              │                  │                     │                    │                    │
