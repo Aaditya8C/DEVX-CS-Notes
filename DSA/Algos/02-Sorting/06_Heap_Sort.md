@@ -45,24 +45,110 @@ Build heap: O(n). Each of n extractions: O(log n). Total: O(n log n).
 
 ## Visualization
 
+### Initial Unsorted Array: `[4, 10, 3, 5, 1]`
+
+```text
+       4 (idx 0)
+      / \
+    10   3
+   /  \
+  5    1
 ```
-[4, 10, 3, 5, 1]
 
-Build max-heap (bottom-up):
-Heapify from n/2-1=1 down to 0:
-  heapify(1): children at 3,4 → max=10→arr[1]=10, swap(1,3): [4,5,3,10,1]
-  Oops—correcting: arr=[4,10,3,5,1], heapify(1): left=arr[3]=5, right=arr[4]=1, max=10 already → no swap
-  heapify(0): left=arr[1]=10 > arr[0]=4 → swap: [10,4,3,5,1] → heapify(1): arr[1]=4 < arr[3]=5 → swap: [10,5,3,4,1]
+---
 
-Max-heap: [10, 5, 3, 4, 1]
+### Phase 1: Build Max-Heap (Floyd's Bottom-Up)
 
-Extract phase:
-  swap(0,4): [1,5,3,4,10] → heapify(0) → [5,4,3,1,|10]
-  swap(0,3): [1,4,3,5,10] → heapify(0) → [4,1,3,|5,10]
-  swap(0,2): [3,1,4,5,10] → heapify(0) → [3,1,|4,5,10]
-  swap(0,1): [1,3,4,5,10] → heapify → [1,|3,4,5,10]
-  Result: [1, 3, 4, 5, 10]
+**Start at last non-leaf node `i = n/2 - 1 = 1`:**
+
+#### 1. `heapify(i=1)` — Node `10`
+- Children of `10` are `5` (left) and `1` (right).
+- `10` is already greater than both. No swap needed.
+
+```text
+       4
+      / \
+    10   3
+   /  \
+  5    1
 ```
+
+#### 2. `heapify(i=0)` — Node `4`
+- Children of `4` are `10` (left) and `3` (right). Max child is `10`.
+- Swap `4` and `10`:
+
+```text
+      10
+      / \
+     4   3
+    / \
+   5   1
+```
+
+- Sift-down `4` at index `1`: Children are `5` and `1`. Max child is `5`.
+- Swap `4` and `5`:
+
+```text
+      10
+      / \
+     5   3
+    / \
+   4   1
+```
+
+**Max-Heap Array:** `[10, 5, 3, 4, 1]`
+
+---
+
+### Phase 2: Extraction & Sorting
+
+#### Extract 1: Max = `10`
+1. Swap root `10` with last element `1` → Array: `[1, 5, 3, 4, | 10]`
+2. `heapify(0)` on remaining 4 elements:
+   - Swap `1` and `5` → then swap `1` and `4`:
+
+```text
+       5
+      / \
+     4   3       [10] (sorted)
+    /
+   1
+```
+**Array:** `[5, 4, 3, 1, | 10]`
+
+#### Extract 2: Max = `5`
+1. Swap root `5` with last element `1` → Array: `[1, 4, 3, | 5, 10]`
+2. `heapify(0)` on remaining 3 elements:
+   - Swap `1` and `4`:
+
+```text
+       4
+      / \        [5, 10] (sorted)
+     1   3
+```
+**Array:** `[4, 1, 3, | 5, 10]`
+
+#### Extract 3: Max = `4`
+1. Swap root `4` with last element `3` → Array: `[3, 1, | 4, 5, 10]`
+2. `heapify(0)` on remaining 2 elements:
+   - `3` > `1`, no swap needed:
+
+```text
+       3
+      /          [4, 5, 10] (sorted)
+     1
+```
+**Array:** `[3, 1, | 4, 5, 10]`
+
+#### Extract 4: Max = `3`
+1. Swap root `3` with last element `1` → Array: `[1, | 3, 4, 5, 10]`
+2. Remaining 1 element is trivially sorted.
+
+```text
+      (1)        [3, 4, 5, 10] (sorted)
+```
+
+**Final Sorted Array:** `[1, 3, 4, 5, 10]`
 
 ---
 
