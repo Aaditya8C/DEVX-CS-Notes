@@ -50,6 +50,21 @@ When another note already explains a concept, reference it using a **See Also** 
 
 ---
 
+# Formatting Guidelines
+
+Never use emoji symbols or special characters (✅, ❌, ✗, →, ←, etc.) in documentation or summaries.
+
+Instead:
+
+- Use plain text for list indicators: "Yes", "No", "Supported", "Not supported".
+- Use descriptive bullet points without symbols.
+- For flow/direction, use words: "leads to", "connects to", "flows from", etc.
+- Use Markdown tables and code blocks for structure when needed.
+
+This keeps documentation accessible, searchable, and consistent across all platforms.
+
+---
+
 # Concept Note Structure
 
 Every HLD concept should generally include the following sections where applicable:
