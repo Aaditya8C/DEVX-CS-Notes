@@ -260,17 +260,3 @@ Batch allocation reduces RPC overhead for high-throughput clients.
 
 ---
 
-## Next steps / Questions for you
-
-Please provide the specific requirements so I can tailor a recommended design and bit allocation:
-
-- Target throughput (avg / peak IDs per second)
-- Desired ID size (32-bit, 64-bit, 128-bit)
-- Must IDs be time-sortable? (yes/no)
-- Is generating IDs offline allowed? (yes/no)
-- Are IDs exposed to customers (human-facing) or internal only?
-
-Once you provide these, I will:
-- Recommend a concrete bit layout (if Snowflake-style) or UUID policy
-- Provide example code snippets for generator and node registration
-- Optionally add a small reference implementation in your repo (language of your choice)
