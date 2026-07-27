@@ -44,11 +44,16 @@ Always ask these before choosing a design. Different requirements lead to differ
 ## Naive approach: single-server auto-increment
 
 ```
-INSERT INTO counters VALUES (...); SELECT LAST_INSERT_ID();
+INSERT INTO users (name, email) VALUES ('Alice', 'alice@example.com');
+SELECT LAST_INSERT_ID();
 ```
+
+
+The database automatically generates a monotonically increasing ID using an AUTO_INCREMENT/identity column.
 
 Pros
 - Simple, consecutive integers, very compact.
+
 Cons
 - Single point of failure and bottleneck; cannot scale horizontally without range allocation.
 
