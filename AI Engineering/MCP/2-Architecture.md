@@ -34,6 +34,7 @@ In practice, that means an IDE can combine several specialized integrations:
 ## Main components
 
 ### 1. Host
+
 The host is the product experience the user sees.
 
 Examples:
@@ -44,9 +45,11 @@ Examples:
 - custom agent runtimes
 
 ### 2. MCP client
+
 The client is responsible for negotiating capabilities and sending requests over the transport layer.
 
 ### 3. MCP server
+
 The server exposes structured capabilities such as:
 
 - Tools: executable actions, such as fetching weather, searching docs, or running a command
@@ -54,6 +57,7 @@ The server exposes structured capabilities such as:
 - Prompts: reusable prompt templates or instruction bundles
 
 ### 4. Transport
+
 The transport carries messages between the client and server.
 
 Common options include:

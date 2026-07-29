@@ -6,10 +6,10 @@
 
 ## STDIO vs SSE
 
-| Transport | Best fit | How it works | Trade-off |
-|---|---|---|---|
-| STDIO | Local desktop integrations | Client launches the server process and sends messages over stdin/stdout | Simple and fast, but tied to the local machine |
-| SSE / Streamable HTTP | Remote or multi-machine deployments | Messages travel over HTTP streaming | More deployment complexity, but better for networked systems |
+| Transport             | Best fit                            | How it works                                                            | Trade-off                                                    |
+| --------------------- | ----------------------------------- | ----------------------------------------------------------------------- | ------------------------------------------------------------ |
+| STDIO                 | Local desktop integrations          | Client launches the server process and sends messages over stdin/stdout | Simple and fast, but tied to the local machine               |
+| SSE / Streamable HTTP | Remote or multi-machine deployments | Messages travel over HTTP streaming                                     | More deployment complexity, but better for networked systems |
 
 ### Why STDIO is common
 
@@ -58,11 +58,18 @@ A shortened version of the flow looks like this:
 import { McpServer } from "@modelcontextprotocol/server";
 import { StdioServerTransport } from "@modelcontextprotocol/server/stdio";
 
-const server = new McpServer({ name: "Weather Data Fetcher", version: "1.0.0" });
-
-server.registerTool("getWeatherDataByCityName", { city: z.string() }, async ({ city }) => {
-  // return tool result
+const server = new McpServer({
+  name: "Weather Data Fetcher",
+  version: "1.0.0",
 });
+
+server.registerTool(
+  "getWeatherDataByCityName",
+  { city: z.string() },
+  async ({ city }) => {
+    // return tool result
+  },
+);
 
 const transport = new StdioServerTransport();
 await server.connect(transport);
@@ -71,11 +78,13 @@ await server.connect(transport);
 ## How to run the demo locally
 
 1. Open the demo folder:
+
    ```bash
    cd "AI Engineering/MCP/demo-mcp"
    ```
 
 2. Install the dependencies:
+
    ```bash
    npm install
    ```
