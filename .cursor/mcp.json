@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "weather-data-fetcher": {
+      "command": "node",
+      "args": [
+        "/home/aaditya/Aaditya/System Design/DEVX-CS-Notes/AI Engineering/MCP/demo-mcp/index.js"
+      ]
+    }
+  }
+}
